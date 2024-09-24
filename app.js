@@ -367,7 +367,7 @@ async function startApi() {
 
     const userId = userGet.userId;
 
-    const verificationLink = `http://localhost:3000/verifylogin?token=${token}&userId=${userId}`;
+    const verificationLink = `https://piyostore.my.id/verifylogin?token=${token}&userId=${userId}`;
 
     const linkPreview = await getUrlInfo(verificationLink, {
       thumbnailWidth: 1024,
@@ -467,7 +467,7 @@ async function startApi() {
 
     saveSession(sessions);
 
-    const verificationLink = `http://localhost:3000/verify?token=${verificationToken}&userId=${userId}`;
+    const verificationLink = `https://piyostore.my.id/verify?token=${verificationToken}&userId=${userId}`;
 
     const linkPreview = await getUrlInfo(verificationLink, {
       thumbnailWidth: 1024,
