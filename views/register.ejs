@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Link ke Tailwind CSS -->
+  </head>
+
+  <body class="bg-gray-200 flex items-center justify-center h-screen">
+    <div class="bg-white shadow-lg rounded-lg p-8 w-96">
+      <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">
+        Daftar Akun
+      </h2>
+      <form method="POST">
+        <div class="mb-4">
+          <label
+            for="phoneNumber"
+            class="block text-sm font-medium text-gray-700"
+            >Nomor Whatsapp</label
+          >
+          <input
+            type="text"
+            id="phoneNumber"
+            name="phoneNumber"
+            required
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Masukkan nomor telepon"
+          />
+        </div>
+        <button
+          type="button"
+          onclick="checkPhoneNumber()"
+          class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg transition duration-200 ease-in-out transform hover:bg-blue-700 hover:scale-105 focus:outline-none focus:ring focus:ring-blue-300"
+        >
+          Kirim Link Verifikasi
+        </button>
+      </form>
+      <p class="mt-6 text-sm text-center text-gray-600">
+        Sudah punya akun?
+        <a href="/login" class="text-blue-600 hover:underline font-semibold"
+          >Login di sini</a
+        >
+      </p>
+    </div>
+
+    <script>
+      async function checkPhoneNumber() {
+        const phoneNumber = document.getElementById("phoneNumber").value;
+        try {
+          const response = await fetch("/check-status?number=" + phoneNumber);
+          const data = await response.json();
+          if (data.status === "available") {
+            await fetch("/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ phoneNumber }),
+            }).then((response) => {
+              if (response.ok) {
+                alert("Link verifikasi telah dikirim ke nomor Anda.");
+                window.location.href = "https://wa.me/6285172134838";
+              } else {
+                alert("Terjadi kesalahan saat membuat akun.");
+              }
+            });
+          } else {
+            alert("Nomor Anda tidak terdaftar atau tidak valid.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Terjadi kesalahan saat mengirim link verifikasi.");
+        }
+      }
+    </script>
+  </body>
+</html>

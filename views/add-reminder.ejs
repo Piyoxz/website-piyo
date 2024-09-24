@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Add Reminder</title>
+</head>
+<body class="bg-gray-100">
+  <div class="container mx-auto p-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Add Reminder</h1>
+
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+      <form id="reminderForm">
+        <div class="mb-4">
+          <label for="reminderText" class="block text-gray-700 font-bold mb-2">Reminder Title</label>
+          <input type="text" id="reminderText" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter reminder title" required>
+        </div>
+
+          <!-- Pilihan berdasarkan Tanggal atau Hari -->
+          <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Choose Schedule Type</label>
+            <div class="flex items-center">
+              <input type="radio" id="specificDate" name="scheduleType" value="date" class="mr-2" checked>
+              <label for="specificDate" class="mr-4">Specific Date</label>
+  
+              <input type="radio" id="weeklySchedule" name="scheduleType" value="weekdays" class="mr-2">
+              <label for="weeklySchedule">Days of the Week</label>
+            </div>
+          </div>
+  
+          <!-- Input Tanggal -->
+          <div id="dateInput" class="mb-4">
+            <label for="reminderDate" class="block text-gray-700 font-bold mb-2">Date</label>
+            <input type="date" id="reminderDate" class="w-full p-2 border border-gray-300 rounded-md">
+          </div>
+  
+          <!-- Input Hari-Hari dalam Seminggu -->
+          <div id="daysOfWeekInput" class="mb-4 hidden">
+            <label class="block text-gray-700 font-bold mb-2">Pilih Hari</label>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full sm:w-1/2 md:w-1/3 px-2 mb-2">
+                <label class="flex items-center">
+                  <input type="checkbox" name="days" value="Monday" class="mr-2">
+                  <span>Senin</span>
+                </label>
+              </div>
+              <div class="w-full sm:w-1/2 md:w-1/3 px-2 mb-2">
+                <label class="flex items-center">
+                  <input type="checkbox" name="days" value="Tuesday" class="mr-2">
+                  <span>Selasa</span>
+                </label>
+              </div>
+              <div class="w-full sm:w-1/2 md:w-1/3 px-2 mb-2">
+                <label class="flex items-center">
+                  <input type="checkbox" name="days" value="Wednesday" class="mr-2">
+                  <span>Rabu</span>
+                </label>
+              </div>
+              <div class="w-full sm:w-1/2 md:w-1/3 px-2 mb-2">
+                <label class="flex items-center">
+                  <input type="checkbox" name="days" value="Thursday" class="mr-2">
+                  <span>Kamis</span>
+                </label>
+              </div>
+              <div class="w-full sm:w-1/2 md:w-1/3 px-2 mb-2">
+                <label class="flex items-center">
+                  <input type="checkbox" name="days" value="Friday" class="mr-2">
+                  <span>Jumat</span>
+                </label>
+              </div>
+              <div class="w-full sm:w-1/2 md:w-1/3 px-2 mb-2">
+                <label class="flex items-center">
+                  <input type="checkbox" name="days" value="Saturday" class="mr-2">
+                  <span>Sabtu</span>
+                </label>
+              </div>
+              <div class="w-full sm:w-1/2 md:w-1/3 px-2 mb-2">
+                <label class="flex items-center">
+                  <input type="checkbox" name="days" value="Sunday" class="mr-2">
+                  <span>Minggu</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+        <!-- Waktu atau interval -->
+        <div class="mb-4">
+          <label class="block text-gray-700 font-bold mb-2">Reminder Type</label>
+          <div class="flex space-x-4">
+            <label class="flex items-center">
+              <input type="radio" name="reminderType" value="time" checked onclick="toggleInterval(false)">
+              <span class="ml-2">Specific Time</span>
+            </label>
+            <label class="flex items-center">
+              <input type="radio" name="reminderType" value="interval" onclick="toggleInterval(true)">
+              <span class="ml-2">Interval</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Waktu tertentu -->
+        <div class="mb-4" id="timeInput">
+          <label for="reminderTime" class="block text-gray-700 font-bold mb-2">Time (WIB)</label>
+          <input type="time" id="reminderTime" class="w-full p-2 border border-gray-300 rounded-md">
+        </div>
+
+        <!-- Interval -->
+        <div class="mb-4 hidden" id="intervalInput">
+          <label for="reminderInterval" class="block text-gray-700 font-bold mb-2">Interval (min. 5 minutes)</label>
+          <input type="number" id="reminderInterval" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter interval in minutes" value="5" min="5" step="5">
+        </div>
+
+        <div class="flex justify-between">
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Add Reminder</button>
+          <button type="button" onclick="goBack()" class="bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleInterval(isInterval) {
+      document.getElementById('timeInput').classList.toggle('hidden', isInterval);
+      document.getElementById('intervalInput').classList.toggle('hidden', !isInterval);
+    }
+
+    const specificDateInput = document.getElementById('dateInput');
+    const daysOfWeekInput = document.getElementById('daysOfWeekInput');
+    const scheduleTypeRadios = document.querySelectorAll('input[name="scheduleType"]');
+
+    scheduleTypeRadios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        if (this.value === 'date') {
+          specificDateInput.classList.remove('hidden');
+          daysOfWeekInput.classList.add('hidden');
+        } else if (this.value === 'weekdays') {
+          specificDateInput.classList.add('hidden');
+          daysOfWeekInput.classList.remove('hidden');
+        }
+      });
+    });
+
+    function goBack() {
+      window.location.href = "/"; // Kembali ke dashboard
+    }
+
+    document.getElementById('reminderForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const title = document.getElementById('reminderText').value;
+      const date = document.getElementById('reminderDate').value;
+      const reminderType = document.querySelector('input[name="reminderType"]:checked').value;
+      const scheduleType = document.querySelector('input[name="scheduleType"]:checked').value;
+      let time = null, interval = null;
+
+
+      let reminderData = {
+        title: title,
+      };
+
+      if (reminderType === 'time') {
+        reminderData.time = document.getElementById('reminderTime').value;
+      } else {
+        reminderData.interval = parseInt(document.getElementById('reminderInterval').value);
+      }
+
+      if (scheduleType === 'date') {
+        reminderData.date = document.getElementById('reminderDate').value;
+      } else {
+        const days = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(el => el.value);
+        reminderData.daysOfWeek = days;
+      }
+
+      const isDataComplete = Object.values(reminderData).every(value => value !== null && value !== NaN && value !== undefined && value !== '');
+      
+      if (!isDataComplete) {
+        alert('Semua kolom harus diisi. Mohon lengkapi semua informasi yang diperlukan.');
+        return;
+      }
+
+      // Send reminder to API
+      fetch('/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reminderData)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Reminder added!');
+          window.location.href = '/';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
